@@ -23,6 +23,8 @@
 #include <unistd.h>
 #include <time.h>
 
+// My new include
+#include "astar.h"
 
 // constants
 #define DIM_MIN 3
@@ -47,7 +49,7 @@ bool won(void);
 void solve(void);
 bool check_solvable(int list[]);
 void shuffle(int list[]);
-void position_blank(int row, int column, int blocked[]);
+void position_blank(int row, int column, int blocked[d][d]);
 int find_row(int number);
 int find_column(int number);
 
@@ -351,6 +353,7 @@ solve(void)
 		for(int j = 0; j < d; j++)
 			blocked[i][j] = 0;
 	
+	
 	// First solve all but the last two rows
 	for(int i = 0; i < d - 2; i++)
 	{
@@ -362,8 +365,23 @@ solve(void)
 			{
 				if(cur_column < j)
 				{
-					position_blank
+					// Block off the number we are trying to move
+					blocked[cur_row][cur_column] = -1;
+					
+					// Position the blank next to the number to move
+					position_blank(cur_row, cur_column, blocked);
+
+					// Unblock number to move
+					blocked[cur_row][cur_column] = 0;
+
+					// Move number
+					move(d*i + j + 1);
 				}
+			}
+
+			while(cur_row != i)
+			{
+				//solve();
 			}
 		}
 	}
@@ -382,6 +400,8 @@ find_row(int number)
 		for(int j = 0; j < d; j++)
 			if(board[i][j] == number)
 				return i;
+	
+	return -1;
 }
 
 
@@ -392,6 +412,8 @@ find_column(int number)
 		for(int j = 0; j < d; j++)
 			if(board[i][j] == number)
 				return j;
+
+	return -1;
 }
 
 
@@ -400,7 +422,19 @@ find_column(int number)
  */
 
 void
-position_blank(int row, int column, int blocked[])
+position_blank(int row, int column, int blocked[d][d])
 {
+
+	// First figure out where the blank is
+	int blank_row = find_row(0);
+	int blank_column = find_column(0);
+
+
+	while(blank_row != row && blank_column != column)
+	{
+		if(blank_row < row)
+		{
+			if(
+
 	
 }
